@@ -121,7 +121,8 @@ button { font: inherit; }
 .jack-kid[hidden] { display: none; }
 .jack-kid { display: block; width: min(52vw, 220px); aspect-ratio: 1; margin: 0 auto 34px; object-fit: cover; -webkit-mask-image: radial-gradient(closest-side, #000 78%, transparent 100%); mask-image: radial-gradient(closest-side, #000 78%, transparent 100%); filter: drop-shadow(0 0 40px rgba(255,122,26,.65)); }
 .screen .small { font-family: var(--mono); font-size: 14px; line-height: 1.5; color: #aaa; margin: 16px auto 0; max-width: 30ch; }
-.again { margin-top: 32px; background: transparent; color: var(--cream); border: 2px solid var(--cream); border-radius: 999px; padding: 7px 26px; font-weight: 700; font-size: 15px; cursor: pointer; }
+.again { margin-top: 32px; background: var(--cream); color: #141414; border: 0; border-radius: 999px; padding: 9px 28px; font-weight: 700; font-size: 15px; cursor: pointer; box-shadow: 0 4px 0 #b99a78; }
+.again:active { transform: translateY(2px); box-shadow: 0 2px 0 #b99a78; }
 .shake { animation: shake .35s linear infinite; }
 @keyframes shake { 0%,100% { transform: translate(0,0); } 20% { transform: translate(-3px,2px); } 40% { transform: translate(3px,-2px); } 60% { transform: translate(-2px,-3px); } 80% { transform: translate(2px,3px); } }
 @media (max-height: 720px) { .fine { display: none; } }
