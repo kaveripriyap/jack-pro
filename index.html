@@ -61,9 +61,9 @@ h1 span { color: var(--pumpkin); }
 
 .crash { background: var(--ink-2); border: 3px solid var(--pumpkin); border-radius: 22px; overflow: hidden; box-shadow: 0 0 36px rgba(255,122,26,.28); }
 .stripe { height: 12px; background: repeating-linear-gradient(-45deg, #141414 0 12px, var(--warn) 12px 24px); }
-.crash-body { position: relative; padding: 10px 16px 12px; display: flex; flex-direction: column; gap: 2px; }
+.crash-body { position: relative; padding: 8px 16px 10px; display: flex; flex-direction: column; gap: 2px; }
 .crash-body .label { font-family: var(--mono); font-size: 12px; letter-spacing: .1em; text-transform: uppercase; color: var(--warn); }
-.clock { font-family: var(--mono); font-weight: 700; font-size: clamp(44px, 8.5dvh, 84px); line-height: 1; color: var(--pumpkin); font-variant-numeric: tabular-nums; text-shadow: 0 0 28px rgba(255,122,26,.55); }
+.clock { font-family: var(--mono); font-weight: 700; font-size: clamp(38px, 6.6dvh, 64px); line-height: 1; color: var(--pumpkin); font-variant-numeric: tabular-nums; text-shadow: 0 0 28px rgba(255,122,26,.55); }
 .crash-body p { margin: 2px 0 0; font-size: 14px; line-height: 1.35; min-height: 2.7em; }
 .crash.danger { border-color: #ff4a2e; animation: throb 1s steps(2) infinite; }
 .crash.danger .clock { color: #ff4a2e; text-shadow: 0 0 28px rgba(255,74,46,.7); }
@@ -73,7 +73,7 @@ h1 span { color: var(--pumpkin); }
 @keyframes plus { 0% { opacity: 0; transform: translateY(10px) scale(.7); } 15% { opacity: 1; transform: translateY(0) scale(1.1); } 70% { opacity: 1; transform: translateY(-14px) scale(1); } 100% { opacity: 0; transform: translateY(-26px) scale(1); } }
 .clock.bump { animation: bump .3s ease-out; }
 @keyframes bump { 40% { transform: scale(1.06); color: var(--warn); } }
-.curse { font-family: var(--display); font-size: clamp(19px, 6.4vw, 24px); line-height: 1; letter-spacing: .04em; color: var(--pumpkin); text-shadow: 0 0 18px rgba(255,122,26,.65), 0 0 4px rgba(255,179,107,.4); text-align: center; white-space: nowrap; }
+.curse { font-family: var(--display); font-size: clamp(19px, 6.4vw, 24px); line-height: 1; letter-spacing: .04em; color: var(--pumpkin); text-shadow: 0 0 18px rgba(255,122,26,.65), 0 0 4px rgba(255,179,107,.4); text-align: center; white-space: nowrap; margin: 6px 0; }
 
 .arena { position: relative; flex: 1 1 130px; min-height: 170px; touch-action: none; border: 2px dashed rgba(255,122,26,.55); border-radius: 18px; background: rgba(255,122,26,.05); user-select: none; -webkit-user-select: none; }
 .arena .hint { position: absolute; left: 14px; right: 14px; bottom: 10px; font-family: var(--mono); font-size: 13px; color: var(--glow); text-align: center; pointer-events: none; }
