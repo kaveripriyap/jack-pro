@@ -228,7 +228,7 @@ button { font: inherit; }
         screen.classList.add('kidding');
         jackKid.src = $('heroImg').src; jackKid.hidden = false;
         big.textContent = 'Just kidding.\nThis time.';
-        small.textContent = 'Jack accepts your fear as payment.\n' + (bribes > 0 ? 'That candy was not enough.' : 'Next time, bring candy.') + '\nJack has standards.';
+        small.textContent = 'Jack accepts your fear as payment.\n' + (bribes >= 3 ? 'The candy was a snack. Your fear is dessert.' : bribes > 0 ? 'That candy barely counted.' : 'Come back with candy.') + '\nJack has standards.';
         again.hidden = false;
       }, 3500);
     }, 700);
@@ -236,36 +236,33 @@ button { font: inherit; }
   again.addEventListener('click', function () { screen.hidden = true; resetUndo(); start(); });
 
   /* bribe */
-  var bribeLines = [
-    ['Candy received. Jack counted 3 pieces. He is still hungry.', 'Bribe noted. Jack bought you 3 more seconds.'],
-    ['Candy accepted. Reset denied. Jack wants the good kind.', 'Jack is chewing. The phone is thinking about it.'],
-    ['Jack ate it. Jack is somehow hungrier now.', 'Jack burped. 3 more seconds, no promises.'],
-    ['Your offer has been logged. Jack added 4 hours to your curse.', 'Jack is checking the wrapper for nuts.'],
-    ['Is that all? Jack counted. It was 11 candy.', 'Jack wants the whole bag. Time still ticking.']
-  ];
+  var bribeSteps = [3, 2, 1];
+  var bribeNotes = ['Tasty. Jack allows it.', 'Hmm. Jack wanted more.', "Jack's patience is thinning."];
+  var FULL = 'Jack is full. No more candy.';
   var defaultNote = 'Give Jack something. Candy works. A soul is pending review.';
-  var noteTimer = null, cooling = false, lastPair = null;
-  function showPlus() {
+  var noteTimer = null, cooling = false;
+  function showPlus(n) {
     var el = document.createElement('div');
-    el.className = 'plus'; el.textContent = '+3s';
+    el.className = 'plus'; el.textContent = '+' + n + 's';
     crash.querySelector('.crash-body').appendChild(el);
     setTimeout(function () { if (el.parentNode) el.parentNode.removeChild(el); }, 1200);
     clock.classList.remove('bump'); void clock.offsetWidth; clock.classList.add('bump');
   }
   bribe.addEventListener('click', function () {
-    if (cooling) return;
-    var pair = bribeLines[Math.floor(Math.random() * bribeLines.length)];
-    if (pair === lastPair) pair = bribeLines[(bribeLines.indexOf(pair) + 1) % bribeLines.length];
-    lastPair = pair;
+    if (cooling || bribes >= bribeSteps.length) return;
+    var add = bribeSteps[bribes];
+    note.textContent = bribeNotes[bribes];
     bribes += 1;
-    note.textContent = pair[0];
-    if (!stopped && left > 2) { left += 3; clock.textContent = fmt(left); showPlus(); }
+    if (!stopped && left > 2) { left += add; clock.textContent = fmt(left); showPlus(add); }
     cooling = true; bribe.disabled = true;
-    var label = bribe.textContent;
     bribe.textContent = 'Jack is chewing...';
     clearTimeout(noteTimer);
-    setTimeout(function () { cooling = false; if (won) return; bribe.disabled = false; bribe.textContent = 'Bribe Jack with candy'; }, 2500);
-    noteTimer = setTimeout(function () { note.textContent = defaultNote; }, 5000);
+    setTimeout(function () {
+      cooling = false; if (won) return;
+      if (bribes >= bribeSteps.length) { bribe.disabled = true; bribe.textContent = FULL; return; }
+      bribe.disabled = false; bribe.textContent = 'Bribe Jack with candy';
+    }, 2500);
+    noteTimer = setTimeout(function () { note.textContent = bribes >= bribeSteps.length ? FULL : defaultNote; }, 5000);
   });
 
   /* dodging button */
