@@ -131,7 +131,7 @@ button { font: inherit; }
   <section class="crash" id="crash" aria-live="polite">
     <div class="stripe"></div>
     <div class="crash-body">
-      <div class="label" id="clockLabel">Your phone will crash in</div>
+      <div class="label" id="clockLabel">Tokens drained. Phone crashing in</div>
       <div class="clock" id="clock">00:20</div>
       <p id="crashNote">Give Jack something. Candy works. A soul is pending review.</p>
     </div>
@@ -317,7 +317,7 @@ button { font: inherit; }
   function resetUndo() {
     runs += 1;
     caught = false; won = false; passed = false; attempts = 0; lastDodge = 0;
-    clockLabel.textContent = 'Your phone will crash in';
+    clockLabel.textContent = 'Tokens drained. Phone crashing in';
     $('term').hidden = true;
     bribe.disabled = false; bribe.textContent = 'Bribe Jack with candy'; cooling = false;
     showPatience();
