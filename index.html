@@ -309,7 +309,7 @@ button { font: inherit; }
     if (now - lastDodge < 350) { if (force) move(); return; }
     lastDodge = now;
     attempts += 1;
-    if (runs > 0) patience -= 1 + Math.floor(Math.random() * 3);
+    if (runs > 0) patience -= 1 + Math.floor(Math.random() * 2);
     showPatience();
     if (runs > 0 && patience <= 0) { patience = 0; showPatience(); settle(); return; }
     move();
