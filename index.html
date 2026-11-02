@@ -80,6 +80,7 @@ h1 span { color: var(--pumpkin); }
 .arena .tries { position: absolute; left: 14px; top: 10px; font-family: var(--mono); font-size: 13px; color: var(--mute); pointer-events: none; }
 button { font: inherit; }
 .undo { position: absolute; left: 50%; top: 48%; transform: translate(-50%, -50%); background: var(--pumpkin); color: #141414; border: 0; border-radius: 999px; padding: 11px 22px; font-weight: 700; font-size: 18px; cursor: pointer; white-space: nowrap; transition: left .05s linear, top .05s linear; box-shadow: 0 6px 0 #a94a00; }
+.undo.wait { opacity: .55; }
 .undo:focus-visible, .bribe:focus-visible, .again:focus-visible { outline: 3px solid var(--cream); outline-offset: 3px; }
 
 .row { display: flex; flex-wrap: wrap; gap: 12px; }
@@ -285,9 +286,15 @@ button { font: inherit; }
     hint.textContent = 'One tap and the curse is gone. (Good luck.)';
     bribes = 0;
   }
-  var won = false, passed = false;
+  var won = false, passed = false, lockUntil = 0;
+  function lock(ms) {
+    lockUntil = Date.now() + ms;
+    undo.classList.add('wait');
+    setTimeout(function () { undo.classList.remove('wait'); }, ms);
+  }
   function win() {
     won = true; stopped = true; clearInterval(timer); clearTimeout(noteTimer);
+    lock(1500);
     bribe.textContent = 'Bribe Jack with 42 candy';
     crash.classList.remove('danger');
     clockLabel.textContent = 'Your phone is';
@@ -332,8 +339,10 @@ button { font: inherit; }
   undo.addEventListener('click', function (e) {
     if (!caught) { e.preventDefault(); return; }
     if (won) {
+      if (Date.now() < lockUntil) return;
       if (!passed) {
         passed = true;
+        lock(1500);
         note.textContent = 'Point at a coworker and say "You are cursed." Curse transferred.';
         hint.textContent = 'Jack has moved on to your coworker.';
         undo.textContent = 'Play again';
