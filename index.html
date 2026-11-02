@@ -75,7 +75,7 @@ h1 span { color: var(--pumpkin); }
 @keyframes bump { 40% { transform: scale(1.06); color: var(--warn); } }
 .curse { font-family: var(--display); font-size: 30px; line-height: 1; letter-spacing: .04em; color: var(--pumpkin); }
 
-.arena { position: relative; flex: 1 1 130px; min-height: 120px; touch-action: none; border: 2px dashed rgba(255,122,26,.55); border-radius: 18px; background: rgba(255,122,26,.05); user-select: none; -webkit-user-select: none; }
+.arena { position: relative; flex: 1 1 130px; min-height: 170px; touch-action: none; border: 2px dashed rgba(255,122,26,.55); border-radius: 18px; background: rgba(255,122,26,.05); user-select: none; -webkit-user-select: none; }
 .arena .hint { position: absolute; left: 14px; right: 14px; bottom: 10px; font-family: var(--mono); font-size: 13px; color: var(--mute); text-align: center; pointer-events: none; }
 .arena .tries { position: absolute; left: 14px; top: 10px; font-family: var(--mono); font-size: 13px; color: var(--mute); pointer-events: none; }
 button { font: inherit; }
@@ -267,10 +267,17 @@ button { font: inherit; }
   function showPatience() {
     tries.textContent = runs === 0 ? "Jack's patience: ???" : "Jack's patience: " + Math.max(25 - attempts, 0) + ' left';
   }
-  function dodge() {
+  var lastTap = 0;
+  function tap() {
+    var t = Date.now();
+    if (t - lastTap < 80) return;
+    lastTap = t;
+    dodge(true);
+  }
+  function dodge(force) {
     if (caught) return;
     var now = Date.now();
-    if (now - lastDodge < 350) return;
+    if (now - lastDodge < 350) { if (force) move(); return; }
     lastDodge = now;
     attempts += 1;
     showPatience();
@@ -284,12 +291,17 @@ button { font: inherit; }
     var px = parseFloat(undo.style.left) || aw / 2, py = parseFloat(undo.style.top) || ah * 0.48;
     if (String(undo.style.left).indexOf('%') > -1) px = aw / 2;
     if (String(undo.style.top).indexOf('%') > -1) py = ah * 0.48;
-    var x, y, n = 0;
+    var TOP = 36, BOTTOM = 54, SIDE = 12;
+    var minX = SIDE + bw / 2, maxX = aw - SIDE - bw / 2;
+    var minY = TOP + bh / 2, maxY = ah - BOTTOM - bh / 2;
+    if (maxX < minX) minX = maxX = aw / 2;
+    if (maxY < minY) minY = maxY = (TOP + ah - BOTTOM) / 2;
+    var x, y, n = 0, far = Math.max(130, aw * 0.4);
     do {
-      x = Math.random() * (aw - bw - 24) + 12 + bw / 2;
-      y = Math.random() * (ah - bh - 56) + 28 + bh / 2;
+      x = minX + Math.random() * (maxX - minX);
+      y = minY + Math.random() * (maxY - minY);
       n += 1;
-    } while (Math.hypot(x - px, y - py) < Math.max(100, aw * 0.28) && n < 14);
+    } while (Math.hypot(x - px, y - py) < far && n < 20);
     undo.style.left = x + 'px';
     undo.style.top = y + 'px';
   }
@@ -347,12 +359,12 @@ button { font: inherit; }
   undo.addEventListener('pointerdown', function (e) {
     if (caught) return;
     e.preventDefault();
-    dodge();
+    tap();
   });
   undo.addEventListener('touchstart', function (e) {
     if (caught) return;
     e.preventDefault();
-    dodge();
+    tap();
   }, { passive: false });
   undo.addEventListener('focus', function () { if (!caught) dodge(); });
   undo.addEventListener('click', function (e) {
