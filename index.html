@@ -100,12 +100,12 @@ button { font: inherit; }
 .fine { font-size: 10px; color: var(--mute); font-family: var(--mono); line-height: 1.5; margin: 0; }
 
 /* fake crash overlay */
-.screen { position: fixed; inset: 0; z-index: 50; background: radial-gradient(70% 42% at 50% 50%, rgba(255,74,46,.30), transparent 72%), #000; color: #fff; display: grid; place-items: center; padding: 24px; text-align: center; }
+.screen { position: fixed; inset: 0; min-height: 100dvh; z-index: 50; background: radial-gradient(70% 42% at 50% 50%, rgba(255,74,46,.30), transparent 72%), #000; color: #fff; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 24px; text-align: center; }
 .screen[hidden] { display: none !important; }
-.screen .big { font-family: var(--mono); font-size: clamp(22px, 6vw, 34px); max-width: 24ch; margin: 0 auto; line-height: 1.25; text-shadow: 0 0 22px rgba(255,74,46,.7); }
+.screen .big { font-family: var(--mono); font-weight: 700; font-size: clamp(22px, 6vw, 34px); max-width: 24ch; margin: 0 auto; line-height: 1.25; text-shadow: 0 0 22px rgba(255,74,46,.7); }
 .screen.kidding { background: radial-gradient(70% 45% at 50% 30%, rgba(255,122,26,.40), transparent 72%), var(--ink); }
-.screen.kidding .big { color: var(--pumpkin); text-shadow: 0 0 24px rgba(255,122,26,.6); }
-.screen.kidding .small { color: var(--glow); }
+.screen.kidding .big { font-family: var(--display); font-weight: 400; font-size: clamp(40px, 12vw, 60px); letter-spacing: .05em; line-height: 1.05; max-width: 12ch; white-space: pre-line; color: var(--pumpkin); text-shadow: 0 0 26px rgba(255,122,26,.65); }
+.screen.kidding .small { font-family: var(--body); font-weight: 500; font-size: 17px; line-height: 1.55; color: #FFE2C4; max-width: none; white-space: pre-line; }
 .jack-kid[hidden] { display: none; }
 .jack-kid { display: block; width: min(52vw, 220px); aspect-ratio: 1; margin: 0 auto 34px; object-fit: cover; -webkit-mask-image: radial-gradient(closest-side, #000 78%, transparent 100%); mask-image: radial-gradient(closest-side, #000 78%, transparent 100%); filter: drop-shadow(0 0 40px rgba(255,122,26,.65)); }
 .screen .small { font-family: var(--mono); font-size: 14px; line-height: 1.5; color: #aaa; margin: 16px auto 0; max-width: 30ch; }
@@ -212,8 +212,8 @@ button { font: inherit; }
       setTimeout(function () {
         screen.classList.add('kidding');
         jackKid.src = $('heroImg').src; jackKid.hidden = false;
-        big.textContent = 'Just kidding. This time.';
-        small.textContent = 'Jack accepts your fear as payment. Next time, bring better candy.';
+        big.textContent = 'Just kidding.\nThis time.';
+        small.textContent = 'Jack accepts your fear as payment.\nNext time, bring candy.\nJack has standards.';
         again.hidden = false;
       }, 3500);
     }, 700);
