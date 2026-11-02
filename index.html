@@ -138,7 +138,7 @@ button { font: inherit; }
   </section>
 
   <div class="row">
-    <button class="bribe" id="bribe" type="button">Bribe Jack with 42 candy</button>
+    <button class="bribe" id="bribe" type="button">Bribe Jack with candy</button>
   </div>
   <p class="msg" id="msg" hidden></p>
 
@@ -222,11 +222,11 @@ button { font: inherit; }
 
   /* bribe */
   var bribeLines = [
-    ['Payment received: 42 candy. Count says 3. Jack is still hungry.', 'Bribe noted. Jack bought you 3 more seconds.'],
+    ['Candy received. Jack counted 3 pieces. He is still hungry.', 'Bribe noted. Jack bought you 3 more seconds.'],
     ['Candy accepted. Reset denied. Jack wants the good kind.', 'Jack is chewing. The phone is thinking about it.'],
     ['Jack ate it. Jack is somehow hungrier now.', 'Jack burped. 3 more seconds, no promises.'],
     ['Your offer has been logged. Jack added 4 hours to your curse.', 'Jack is checking the wrapper for nuts.'],
-    ['Is that all? Jack counted. It was 11 candy.', 'Jack wants the full 42. Time still ticking.']
+    ['Is that all? Jack counted. It was 11 candy.', 'Jack wants the whole bag. Time still ticking.']
   ];
   var defaultNote = 'Give Jack something. Candy works. A soul is pending review.';
   var noteTimer = null, cooling = false, lastPair = null;
@@ -249,7 +249,7 @@ button { font: inherit; }
     var label = bribe.textContent;
     bribe.textContent = 'Jack is chewing...';
     clearTimeout(noteTimer);
-    setTimeout(function () { cooling = false; if (won) return; bribe.disabled = false; bribe.textContent = 'Bribe Jack with 42 candy'; }, 2500);
+    setTimeout(function () { cooling = false; if (won) return; bribe.disabled = false; bribe.textContent = 'Bribe Jack with candy'; }, 2500);
     noteTimer = setTimeout(function () { note.textContent = defaultNote; }, 5000);
   });
 
@@ -274,7 +274,7 @@ button { font: inherit; }
   }
   var lastDodge = 0, runs = 0;
   function showPatience() {
-    tries.textContent = runs === 0 ? "Jack's patience: ???" : "Jack's patience: " + Math.max(25 - attempts, 0) + ' left';
+    tries.textContent = runs === 0 ? "Jack's patience: ???" : "Jack's patience: " + Math.max(42 - attempts * 2, 0) + ' left';
   }
   var lastTap = 0;
   function tap() {
@@ -290,7 +290,7 @@ button { font: inherit; }
     lastDodge = now;
     attempts += 1;
     showPatience();
-    if (runs > 0 && attempts >= 25) { settle(); return; }
+    if (runs > 0 && attempts >= 21) { settle(); return; }
     move();
     hint.textContent = pick(lines);
   }
@@ -319,7 +319,7 @@ button { font: inherit; }
     caught = false; won = false; passed = false; attempts = 0; lastDodge = 0;
     clockLabel.textContent = 'Your phone will crash in';
     $('term').hidden = true;
-    bribe.disabled = false; bribe.textContent = 'Bribe Jack with 42 candy'; cooling = false;
+    bribe.disabled = false; bribe.textContent = 'Bribe Jack with candy'; cooling = false;
     showPatience();
     undo.textContent = 'Undo curse';
     undo.style.left = '50%'; undo.style.top = '48%';
@@ -335,7 +335,7 @@ button { font: inherit; }
   function win() {
     won = true; stopped = true; clearInterval(timer); clearTimeout(noteTimer);
     lock(1500);
-    bribe.textContent = 'Bribe Jack with 42 candy';
+    bribe.textContent = 'Bribe Jack with candy';
     crash.classList.remove('danger');
     clockLabel.textContent = 'Your phone is';
     clock.textContent = 'SAFE';
