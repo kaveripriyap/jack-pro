@@ -61,7 +61,7 @@ h1 span { color: var(--pumpkin); }
 
 .crash { background: var(--ink-2); border: 3px solid var(--pumpkin); border-radius: 22px; overflow: hidden; }
 .stripe { height: 12px; background: repeating-linear-gradient(-45deg, #141414 0 12px, var(--warn) 12px 24px); }
-.crash-body { padding: 10px 16px 12px; display: flex; flex-direction: column; gap: 2px; }
+.crash-body { position: relative; padding: 10px 16px 12px; display: flex; flex-direction: column; gap: 2px; }
 .crash-body .label { font-family: var(--mono); font-size: 12px; letter-spacing: .1em; text-transform: uppercase; color: var(--warn); }
 .clock { font-family: var(--mono); font-weight: 700; font-size: clamp(44px, 8.5dvh, 84px); line-height: 1; color: var(--pumpkin); font-variant-numeric: tabular-nums; text-shadow: 0 0 28px rgba(255,122,26,.55); }
 .crash-body p { margin: 2px 0 0; font-size: 14px; line-height: 1.35; min-height: 2.7em; }
@@ -69,6 +69,10 @@ h1 span { color: var(--pumpkin); }
 .crash.danger .clock { color: #ff4a2e; text-shadow: 0 0 28px rgba(255,74,46,.7); }
 @keyframes throb { 50% { box-shadow: 0 0 0 6px rgba(255,74,46,.25); } }
 
+.plus { position: absolute; right: 18px; top: 30px; font-family: var(--mono); font-weight: 700; font-size: 22px; line-height: 1; color: #141414; background: var(--warn); border-radius: 999px; padding: 6px 12px; pointer-events: none; animation: plus 1.1s ease-out forwards; box-shadow: 0 0 18px rgba(255,194,26,.6); }
+@keyframes plus { 0% { opacity: 0; transform: translateY(10px) scale(.7); } 15% { opacity: 1; transform: translateY(0) scale(1.1); } 70% { opacity: 1; transform: translateY(-14px) scale(1); } 100% { opacity: 0; transform: translateY(-26px) scale(1); } }
+.clock.bump { animation: bump .3s ease-out; }
+@keyframes bump { 40% { transform: scale(1.06); color: var(--warn); } }
 .curse { font-family: var(--display); font-size: 30px; line-height: 1; letter-spacing: .04em; color: var(--pumpkin); }
 
 .arena { position: relative; flex: 1 1 130px; min-height: 120px; touch-action: none; border: 2px dashed rgba(255,122,26,.55); border-radius: 18px; background: rgba(255,122,26,.05); user-select: none; -webkit-user-select: none; }
@@ -103,7 +107,9 @@ button { font: inherit; }
 @keyframes shake { 0%,100% { transform: translate(0,0); } 20% { transform: translate(-3px,2px); } 40% { transform: translate(3px,-2px); } 60% { transform: translate(-2px,-3px); } 80% { transform: translate(2px,3px); } }
 @media (max-height: 720px) { .fine { display: none; } .curse { font-size: 26px; } }
 @media (prefers-reduced-motion: reduce) {
-  .shake, .crash.danger { animation: none; }
+  .shake, .crash.danger, .clock.bump { animation: none; }
+  .plus { animation: plusfade 1.1s linear forwards; }
+  @keyframes plusfade { 0%,70% { opacity: 1; } 100% { opacity: 0; } }
   .undo { transition: none; }
 }
 </style>
@@ -212,12 +218,19 @@ button { font: inherit; }
   ];
   var defaultNote = 'Give Jack something. Candy works. A soul is pending review.';
   var noteTimer = null, cooling = false;
+  function showPlus() {
+    var el = document.createElement('div');
+    el.className = 'plus'; el.textContent = '+3s';
+    crash.querySelector('.crash-body').appendChild(el);
+    setTimeout(function () { if (el.parentNode) el.parentNode.removeChild(el); }, 1200);
+    clock.classList.remove('bump'); void clock.offsetWidth; clock.classList.add('bump');
+  }
   bribe.addEventListener('click', function () {
     if (cooling) return;
     var pair = bribeLines[bribes % bribeLines.length];
     bribes += 1;
     note.textContent = pair[0];
-    if (!stopped && left > 2) { left += 3; clock.textContent = fmt(left); }
+    if (!stopped && left > 2) { left += 3; clock.textContent = fmt(left); showPlus(); }
     cooling = true; bribe.disabled = true;
     var label = bribe.textContent;
     bribe.textContent = 'Jack is chewing...';
