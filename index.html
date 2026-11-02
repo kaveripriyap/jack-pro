@@ -88,6 +88,7 @@ button { font: inherit; }
 .bribe:active { transform: translateY(1px); }
 .msg { min-height: 2.6em; margin: 0; font-family: var(--mono); font-size: 12.5px; line-height: 1.3; color: var(--glow); }
 
+.term[hidden] { display: none; }
 .term { background: #000; border: 2px solid var(--pumpkin); border-radius: 14px; padding: 8px 12px; font-family: var(--mono); font-size: 12px; line-height: 1.45; overflow-x: auto; white-space: nowrap; }
 .term .p { color: var(--pumpkin); }
 .term .c { color: var(--cream); }
@@ -143,7 +144,7 @@ button { font: inherit; }
     <span class="hint" id="hint">One tap and the curse is gone. (Good luck.)</span>
   </div>
 
-  <div class="term" aria-label="terminal">
+  <div class="term" id="term" aria-label="terminal" hidden>
     <div><span class="p">$</span> <span class="c">jack</span> <span class="f">--bribe</span> <span class="ok">&rarr; 42 candy = reset</span></div>
     <div><span class="p">$</span> <span class="c">sudo exorcise</span> <span class="no">&rarr; permission denied</span></div>
   </div>
@@ -168,7 +169,7 @@ button { font: inherit; }
   var clockLabel = $('clockLabel');
   var big = $('screenBig'), small = $('screenSmall'), again = $('again'), app = $('app');
 
-  var T0 = 20, left = T0, timer = null, stopped = false;
+  var T0 = 20, left = T0, timer = null, stopped = false, runStart = Date.now();
   var attempts = 0, caught = false, bribes = 0;
 
   function fmt(n) { return '00:' + (n < 10 ? '0' : '') + n; }
@@ -183,7 +184,7 @@ button { font: inherit; }
     if (left <= 0) { clearInterval(timer); fakeCrash(); }
   }
   function start() {
-    left = T0; stopped = false;
+    left = T0; stopped = false; runStart = Date.now();
     clock.textContent = fmt(left);
     crash.classList.remove('danger');
     note.textContent = defaultNote;
@@ -276,6 +277,7 @@ button { font: inherit; }
     runs += 1;
     caught = false; won = false; passed = false; attempts = 0; lastDodge = 0;
     clockLabel.textContent = 'Your phone will crash in';
+    $('term').hidden = true;
     bribe.disabled = false; bribe.textContent = 'Bribe Jack with 42 candy'; cooling = false;
     tries.textContent = 'undo attempts: 0';
     undo.textContent = 'Undo curse';
@@ -292,7 +294,13 @@ button { font: inherit; }
     clock.textContent = 'SAFE';
     note.textContent = 'Curse undone*. Phone saved. *You owe Jack 42 candy.';
     undo.textContent = 'Curse someone else';
-    hint.textContent = 'You beat Jack. Show him this screen for your candy debt.';
+    var secs = (Date.now() - runStart) / 1000, best = secs;
+    try {
+      var prev = parseFloat(localStorage.getItem('jackBest'));
+      if (prev && prev < secs) best = prev; else localStorage.setItem('jackBest', String(secs));
+    } catch (err) {}
+    hint.textContent = 'Beat Jack in ' + secs.toFixed(1) + 's. Your best: ' + best.toFixed(1) + 's.';
+    $('term').hidden = false;
     bribe.disabled = true;
     buzz([60, 40, 60]);
   }
