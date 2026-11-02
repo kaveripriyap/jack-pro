@@ -318,7 +318,7 @@ button { font: inherit; }
     crash.classList.remove('danger');
     clockLabel.textContent = 'Your phone is';
     clock.textContent = 'SAFE';
-    note.textContent = 'Curse undone*. Phone saved. *You owe Jack 42 candy.';
+    note.textContent = 'Curse undone. Phone saved. You still owe Jack 42 candy.';
     undo.textContent = 'Curse someone else';
     var secs = (Date.now() - runStart) / 1000, best = secs;
     try {
@@ -333,8 +333,8 @@ button { font: inherit; }
   function settle() {
     caught = true;
     undo.style.left = '50%'; undo.style.top = '48%';
-    undo.textContent = 'Undo curse*';
-    hint.textContent = 'Jack got bored and gave up. Tap it now. *Terms apply.';
+    undo.textContent = 'Undo curse!';
+    hint.textContent = 'Jack got bored and gave up. Tap it now!';
     buzz(40);
   }
   arena.addEventListener('pointermove', function (e) {
