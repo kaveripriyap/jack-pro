@@ -140,7 +140,7 @@ button { font: inherit; }
   <div class="curse">You are cursed for 1,313h</div>
 
   <div class="arena" id="arena">
-    <span class="tries" id="tries">undo attempts: 0</span>
+    <span class="tries" id="tries">Jack's patience: ???</span>
     <button class="undo" id="undo" type="button">Undo curse</button>
     <span class="hint" id="hint">One tap and the curse is gone. (Good luck.)</span>
   </div>
@@ -220,7 +220,7 @@ button { font: inherit; }
     ['Is that all? Jack counted. It was 11 candy.', 'Jack wants the full 42. Time still ticking.']
   ];
   var defaultNote = 'Give Jack something. Candy works. A soul is pending review.';
-  var noteTimer = null, cooling = false;
+  var noteTimer = null, cooling = false, lastPair = null;
   function showPlus() {
     var el = document.createElement('div');
     el.className = 'plus'; el.textContent = '+3s';
@@ -230,7 +230,9 @@ button { font: inherit; }
   }
   bribe.addEventListener('click', function () {
     if (cooling) return;
-    var pair = bribeLines[bribes % bribeLines.length];
+    var pair = bribeLines[Math.floor(Math.random() * bribeLines.length)];
+    if (pair === lastPair) pair = bribeLines[(bribeLines.indexOf(pair) + 1) % bribeLines.length];
+    lastPair = pair;
     bribes += 1;
     note.textContent = pair[0];
     if (!stopped && left > 2) { left += 3; clock.textContent = fmt(left); showPlus(); }
@@ -245,19 +247,36 @@ button { font: inherit; }
   /* dodging button */
   var lines = [
     'Too slow.', 'Nice try.', 'Jack moved it.', 'Warmer. No.', 'Curses are sticky.',
-    'Have you tried candy?', 'Almost. Not really.', 'Still cursed.', 'Jack is enjoying this.', 'Is that your best?', 'Slippery little thing.', 'Jack sees you.'
+    'Have you tried candy?', 'Almost. Not really.', 'Still cursed.', 'Jack is enjoying this.',
+    'Is that your best?', 'Slippery little thing.', 'Jack sees you.', 'Not today.',
+    'So close. Not close at all.', 'Jack blinked. You missed.', 'Ha. No.', 'Your thumb is too honest.',
+    'The curse says no.', 'Try again. Jack insists.', 'You call that a tap?', 'Missed. Spooky.',
+    'Jack has seen faster.', 'Bold of you to tap there.', 'That tickled.', 'Nope. Still 1,313h.',
+    'Jack is loading... a new spot.', 'Fear the button.', 'Boo. Missed again.', 'Cursed and clumsy.',
+    'The button has left the chat.', 'Jack moved faster than you.', 'Denied by a pumpkin.',
+    'Is your phone cursed too?', 'Jack is not impressed.', 'Keep going. He likes it.', 'Out of tokens, out of luck.'
   ];
+  var lastLines = [];
+  function pick(list) {
+    var i, n = 0;
+    do { i = Math.floor(Math.random() * list.length); n += 1; } while (lastLines.indexOf(list[i]) > -1 && n < 20);
+    lastLines.push(list[i]); if (lastLines.length > 6) lastLines.shift();
+    return list[i];
+  }
   var lastDodge = 0, runs = 0;
+  function showPatience() {
+    tries.textContent = runs === 0 ? "Jack's patience: ???" : "Jack's patience: " + Math.max(25 - attempts, 0) + ' left';
+  }
   function dodge() {
     if (caught) return;
     var now = Date.now();
     if (now - lastDodge < 350) return;
     lastDodge = now;
     attempts += 1;
-    tries.textContent = 'undo attempts: ' + attempts;
+    showPatience();
     if (runs > 0 && attempts >= 25) { settle(); return; }
     move();
-    hint.textContent = lines[(attempts - 1) % lines.length];
+    hint.textContent = pick(lines);
   }
   function move() {
     var aw = arena.clientWidth, ah = arena.clientHeight;
@@ -280,7 +299,7 @@ button { font: inherit; }
     clockLabel.textContent = 'Your phone will crash in';
     $('term').hidden = true;
     bribe.disabled = false; bribe.textContent = 'Bribe Jack with 42 candy'; cooling = false;
-    tries.textContent = 'undo attempts: 0';
+    showPatience();
     undo.textContent = 'Undo curse';
     undo.style.left = '50%'; undo.style.top = '48%';
     hint.textContent = 'One tap and the curse is gone. (Good luck.)';
