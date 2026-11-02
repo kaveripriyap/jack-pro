@@ -124,7 +124,7 @@ button { font: inherit; }
   <section class="crash" id="crash" aria-live="polite">
     <div class="stripe"></div>
     <div class="crash-body">
-      <div class="label">Your phone will crash in</div>
+      <div class="label" id="clockLabel">Your phone will crash in</div>
       <div class="clock" id="clock">00:20</div>
       <p id="crashNote">Give Jack something. Candy works. A soul is pending review.</p>
     </div>
@@ -165,6 +165,7 @@ button { font: inherit; }
   var clock = $('clock'), crash = $('crash'), note = $('crashNote');
   var arena = $('arena'), undo = $('undo'), tries = $('tries'), hint = $('hint');
   var msg = $('msg'), bribe = $('bribe'), screen = $('screen');
+  var clockLabel = $('clockLabel');
   var big = $('screenBig'), small = $('screenSmall'), again = $('again'), app = $('app');
 
   var T0 = 20, left = T0, timer = null, stopped = false;
@@ -235,7 +236,7 @@ button { font: inherit; }
     var label = bribe.textContent;
     bribe.textContent = 'Jack is chewing...';
     clearTimeout(noteTimer);
-    setTimeout(function () { cooling = false; bribe.disabled = false; bribe.textContent = 'Bribe Jack with 42 candy'; }, 2500);
+    setTimeout(function () { cooling = false; if (won) return; bribe.disabled = false; bribe.textContent = 'Bribe Jack with 42 candy'; }, 2500);
     noteTimer = setTimeout(function () { note.textContent = defaultNote; }, 5000);
   });
 
@@ -273,21 +274,26 @@ button { font: inherit; }
   }
   function resetUndo() {
     runs += 1;
-    caught = false; won = false; attempts = 0; lastDodge = 0;
+    caught = false; won = false; passed = false; attempts = 0; lastDodge = 0;
+    clockLabel.textContent = 'Your phone will crash in';
+    bribe.disabled = false; bribe.textContent = 'Bribe Jack with 42 candy'; cooling = false;
     tries.textContent = 'undo attempts: 0';
     undo.textContent = 'Undo curse';
     undo.style.left = '50%'; undo.style.top = '48%';
     hint.textContent = 'One tap and the curse is gone. (Good luck.)';
     bribes = 0;
   }
-  var won = false;
+  var won = false, passed = false;
   function win() {
-    won = true; stopped = true; clearInterval(timer);
+    won = true; stopped = true; clearInterval(timer); clearTimeout(noteTimer);
+    bribe.textContent = 'Bribe Jack with 42 candy';
     crash.classList.remove('danger');
+    clockLabel.textContent = 'Your phone is';
     clock.textContent = 'SAFE';
     note.textContent = 'Curse undone*. Phone saved. *You owe Jack 42 candy.';
     undo.textContent = 'Curse someone else';
-    hint.textContent = 'You beat Jack. Show him the screen for your candy debt.';
+    hint.textContent = 'You beat Jack. Show him this screen for your candy debt.';
+    bribe.disabled = true;
     buzz([60, 40, 60]);
   }
   function settle() {
@@ -317,7 +323,15 @@ button { font: inherit; }
   undo.addEventListener('focus', function () { if (!caught) dodge(); });
   undo.addEventListener('click', function (e) {
     if (!caught) { e.preventDefault(); return; }
-    if (won) { resetUndo(); start(); return; }
+    if (won) {
+      if (!passed) {
+        passed = true;
+        note.textContent = 'Point at a coworker and say "You are cursed." Curse transferred.';
+        hint.textContent = 'Jack has moved on to your coworker.';
+        undo.textContent = 'Play again';
+      } else { resetUndo(); start(); }
+      return;
+    }
     if (!stopped) win();
   });
 
