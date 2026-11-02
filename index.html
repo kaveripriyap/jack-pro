@@ -156,7 +156,7 @@ button { font: inherit; }
 <div class="screen" id="screen" hidden role="alert">
   <div>
     <div class="big" id="screenBig">Phone crashed.</div>
-    <div class="small" id="screenSmall">Error 429: too many trick-or-tokens requests</div>
+    <div class="small" id="screenSmall">Error 429: too many tricks, not enough tokens</div>
     <button class="again" id="again" type="button" hidden>Reboot</button>
   </div>
 </div>
@@ -200,7 +200,7 @@ button { font: inherit; }
       app.classList.remove('shake');
       screen.hidden = false;
       big.textContent = 'Phone crashed.';
-      small.textContent = 'Error 429: too many trick-or-tokens requests';
+      small.textContent = 'Error 429: too many tricks, not enough tokens';
       again.hidden = true;
       setTimeout(function () {
         big.textContent = 'Just kidding. This time.';
