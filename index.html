@@ -213,7 +213,7 @@ button { font: inherit; }
         screen.classList.add('kidding');
         jackKid.src = $('heroImg').src; jackKid.hidden = false;
         big.textContent = 'Just kidding.\nThis time.';
-        small.textContent = 'Jack accepts your fear as payment.\nNext time, bring candy.\nJack has standards.';
+        small.textContent = 'Jack accepts your fear as payment.\n' + (bribes > 0 ? 'That candy was not enough.' : 'Next time, bring candy.') + '\nJack has standards.';
         again.hidden = false;
       }, 3500);
     }, 700);
