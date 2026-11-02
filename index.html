@@ -238,7 +238,7 @@ button { font: inherit; }
   /* bribe */
   var bribeSteps = [3, 2, 1];
   var bribeNotes = ['Tasty. Jack allows it.', 'Hmm. Jack wanted more.', "Jack's patience is thinning."];
-  var FULL = 'Jack is full. No more candy.';
+  var OUT = 'Out of candy', OUTNOTE = 'Jack ate everything you had. Nothing left to bribe him with.';
   var defaultNote = 'Give Jack something. Candy works. A soul is pending review.';
   var noteTimer = null, cooling = false;
   function showPlus(n) {
@@ -259,10 +259,10 @@ button { font: inherit; }
     clearTimeout(noteTimer);
     setTimeout(function () {
       cooling = false; if (won) return;
-      if (bribes >= bribeSteps.length) { bribe.disabled = true; bribe.textContent = FULL; return; }
+      if (bribes >= bribeSteps.length) { bribe.disabled = true; bribe.textContent = OUT; note.textContent = OUTNOTE; return; }
       bribe.disabled = false; bribe.textContent = 'Bribe Jack with candy';
     }, 2500);
-    noteTimer = setTimeout(function () { note.textContent = bribes >= bribeSteps.length ? FULL : defaultNote; }, 5000);
+    noteTimer = setTimeout(function () { if (bribes < bribeSteps.length) note.textContent = defaultNote; }, 5000);
   });
 
   /* dodging button */
