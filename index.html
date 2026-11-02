@@ -113,7 +113,11 @@ button { font: inherit; }
 .screen .big { font-family: var(--mono); font-weight: 700; font-size: clamp(22px, 6vw, 34px); max-width: 24ch; margin: 0 auto; line-height: 1.25; text-shadow: 0 0 22px rgba(255,74,46,.7); }
 .screen.kidding { background: radial-gradient(70% 45% at 50% 30%, rgba(255,122,26,.40), transparent 72%), var(--ink); }
 .screen.kidding .big { text-transform: none; font-family: var(--display); font-weight: 400; font-size: clamp(40px, 12vw, 60px); letter-spacing: .05em; line-height: 1.05; max-width: 12ch; white-space: pre-line; color: var(--pumpkin); text-shadow: 0 0 26px rgba(255,122,26,.65); }
-.screen.kidding .small { font-family: var(--body); font-weight: 500; font-size: 17px; line-height: 1.55; color: #FFE2C4; max-width: none; white-space: pre-line; }
+.screen.kidding .small { font-family: var(--body); font-weight: 500; line-height: 1.55; max-width: none; }
+.screen.kidding .small span { display: block; }
+.screen.kidding .small .lead { font-size: 17px; font-weight: 700; color: #FFC48A; margin-bottom: 4px; }
+.screen.kidding .small .rest { font-size: 15px; color: rgba(255, 226, 196, .8); }
+.screen.kidding .again { margin-top: 22px; }
 .jack-kid[hidden] { display: none; }
 .jack-kid { display: block; width: min(52vw, 220px); aspect-ratio: 1; margin: 0 auto 34px; object-fit: cover; -webkit-mask-image: radial-gradient(closest-side, #000 78%, transparent 100%); mask-image: radial-gradient(closest-side, #000 78%, transparent 100%); filter: drop-shadow(0 0 40px rgba(255,122,26,.65)); }
 .screen .small { font-family: var(--mono); font-size: 14px; line-height: 1.5; color: #aaa; margin: 16px auto 0; max-width: 30ch; }
@@ -228,7 +232,11 @@ button { font: inherit; }
         screen.classList.add('kidding');
         jackKid.src = $('heroImg').src; jackKid.hidden = false;
         big.textContent = 'Just kidding.\nThis time.';
-        small.textContent = 'Jack accepts your fear as payment.\n' + (bribes >= 3 ? 'The candy was a snack.\nYour fear is dessert.' : bribes > 0 ? 'That candy barely counted.' : 'Come back with candy.') + '\nJack has standards.';
+        small.textContent = '';
+        var rest = (bribes >= 3 ? ['The candy was a snack.', 'Your fear is dessert.'] : bribes > 0 ? ['That candy barely counted.'] : ['Come back with candy.']).concat(['Jack has standards.']);
+        ['Jack accepts your fear as payment.'].concat(rest).forEach(function (t, k) {
+          var d = document.createElement('span'); d.className = k === 0 ? 'lead' : 'rest'; d.textContent = t; small.appendChild(d);
+        });
         again.hidden = false;
       }, 4000);
     }, 700);
