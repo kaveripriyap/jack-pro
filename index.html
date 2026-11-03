@@ -73,7 +73,8 @@ h1 span { color: var(--pumpkin); }
 @keyframes plus { 0% { opacity: 0; transform: translateY(10px) scale(.7); } 15% { opacity: 1; transform: translateY(0) scale(1.1); } 70% { opacity: 1; transform: translateY(-14px) scale(1); } 100% { opacity: 0; transform: translateY(-26px) scale(1); } }
 .clock.bump { animation: bump .3s ease-out; }
 @keyframes bump { 40% { transform: scale(1.06); color: var(--warn); } }
-.curse.lifted { color: var(--cream); text-shadow: 0 0 16px rgba(255,241,221,.35); }
+.curse.lifted { color: var(--cream); text-shadow: 0 0 16px rgba(255,241,221,.35); white-space: pre-line; line-height: 1.15; font-size: clamp(18px, 5.6vw, 22px); }
+.curse.lifted + .arena { min-height: 130px; }
 .curse { font-family: var(--display); font-size: clamp(19px, 6.7vw, 25px); line-height: 1; letter-spacing: .04em; color: var(--pumpkin); text-shadow: 0 0 18px rgba(255,122,26,.65), 0 0 4px rgba(255,179,107,.4); text-align: center; white-space: nowrap; margin: 6px 0; }
 
 .arena { position: relative; flex: 1 1 130px; min-height: 170px; touch-action: none; border: 2px dashed rgba(255,122,26,.55); border-radius: 18px; background: rgba(255,122,26,.05); user-select: none; -webkit-user-select: none; }
@@ -363,7 +364,7 @@ button { font: inherit; }
     crash.classList.remove('danger');
     clockLabel.textContent = 'Your phone is';
     clock.textContent = 'SAFE';
-    curseEl.textContent = 'Curse lifted. 0h remaining.'; curseEl.classList.add('lifted');
+    curseEl.textContent = 'Curse lifted.\nZero hours left. For now.'; curseEl.classList.add('lifted');
     note.textContent = 'Curse undone. Phone saved. You still owe Jack candy.';
     undo.textContent = 'Curse someone else';
     var secs = (Date.now() - runStart) / 1000, best = secs;
