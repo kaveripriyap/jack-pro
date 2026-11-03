@@ -73,6 +73,7 @@ h1 span { color: var(--pumpkin); }
 @keyframes plus { 0% { opacity: 0; transform: translateY(10px) scale(.7); } 15% { opacity: 1; transform: translateY(0) scale(1.1); } 70% { opacity: 1; transform: translateY(-14px) scale(1); } 100% { opacity: 0; transform: translateY(-26px) scale(1); } }
 .clock.bump { animation: bump .3s ease-out; }
 @keyframes bump { 40% { transform: scale(1.06); color: var(--warn); } }
+.curse.lifted { color: var(--cream); text-shadow: 0 0 16px rgba(255,241,221,.35); }
 .curse { font-family: var(--display); font-size: clamp(19px, 6.7vw, 25px); line-height: 1; letter-spacing: .04em; color: var(--pumpkin); text-shadow: 0 0 18px rgba(255,122,26,.65), 0 0 4px rgba(255,179,107,.4); text-align: center; white-space: nowrap; margin: 6px 0; }
 
 .arena { position: relative; flex: 1 1 130px; min-height: 170px; touch-action: none; border: 2px dashed rgba(255,122,26,.55); border-radius: 18px; background: rgba(255,122,26,.05); user-select: none; -webkit-user-select: none; }
@@ -156,7 +157,7 @@ button { font: inherit; }
   </div>
   <p class="msg" id="msg" hidden></p>
 
-  <div class="curse">You are cursed for 1,313h</div>
+  <div class="curse" id="curse">You are cursed for 1,313h</div>
 
   <div class="arena" id="arena">
     <span class="tries" id="tries">Jack's patience: ???</span>
@@ -188,7 +189,7 @@ button { font: inherit; }
   var clock = $('clock'), crash = $('crash'), note = $('crashNote');
   var arena = $('arena'), undo = $('undo'), tries = $('tries'), hint = $('hint');
   var msg = $('msg'), bribe = $('bribe'), screen = $('screen');
-  var clockLabel = $('clockLabel'), jackKid = $('screenJack'), kern = $('kern');
+  var clockLabel = $('clockLabel'), jackKid = $('screenJack'), kern = $('kern'), curseEl = $('curse');
   var big = $('screenBig'), small = $('screenSmall'), again = $('again'), app = $('app');
 
   var T0 = 20, left = T0, timer = null, stopped = false, runStart = Date.now();
@@ -340,6 +341,7 @@ button { font: inherit; }
     runs += 1;
     caught = false; won = false; passed = false; attempts = 0; patience = 42; lastDodge = 0;
     clockLabel.textContent = 'Tokens drained. Phone crashing in';
+    curseEl.textContent = 'You are cursed for 1,313h'; curseEl.classList.remove('lifted');
     $('term').hidden = true;
     bribe.disabled = false; bribe.textContent = 'Bribe Jack with candy'; cooling = false;
     showPatience();
@@ -361,6 +363,7 @@ button { font: inherit; }
     crash.classList.remove('danger');
     clockLabel.textContent = 'Your phone is';
     clock.textContent = 'SAFE';
+    curseEl.textContent = 'Curse lifted. 0h remaining.'; curseEl.classList.add('lifted');
     note.textContent = 'Curse undone. Phone saved. You still owe Jack candy.';
     undo.textContent = 'Curse someone else';
     var secs = (Date.now() - runStart) / 1000, best = secs;
